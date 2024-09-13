@@ -1,0 +1,8 @@
+[deps]
+Conda = "8f4d0f93-b110-5947-807f-2305c1781a2d"
+CondaPkg = "992eb4ea-22a4-4c89-a5bb-47a3300528ab"
+CxxWrap = "1f15a43c-97ca-5a2a-ae31-89f07a497df4"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Pipe = "b98c9c47-44ae-5843-9183-064241ee97a0"
+PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
+RCall = "6f49c342-dc21-5d91-9882-a32aef131414"

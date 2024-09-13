@@ -1,0 +1,10 @@
+[deps]
+CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+Downloads = "f43a241f-c20a-4ad4-852c-f6b1247861c6"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+OdsIO = "56b0d19f-0a74-5872-92bc-f48f9c5431d4"
+Pipe = "b98c9c47-44ae-5843-9183-064241ee97a0"
+XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"

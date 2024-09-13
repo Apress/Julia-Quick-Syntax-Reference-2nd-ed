@@ -31,10 +31,10 @@ using Pipe, HTTP, CSV, DataFrames, LsqFit, StatsPlots
 # 3) Load the data
 
 # Import data from remote..
-ltURL     = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/arbres_foret_2012.csv?raw=true"
-dtURL     = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/arbres_morts_foret_2012.csv?raw=true"
-pointsURL = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/placettes_foret_2012.csv?raw=true"
-docURL    = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/documentation_2012.csv?raw=true"
+ltURL     = "https://bit.ly/apress_julia_alive_trees"
+dtURL     = "https://bit.ly/apress_julia_dead_trees"
+pointsURL = "https://bit.ly/apress_julia_inv_points"
+docURL    = "https://bit.ly/apress_julia_inv_doc"
 
 lt     = @pipe HTTP.get(ltURL).body |> CSV.File(_) |> DataFrame
 dt     = @pipe HTTP.get(dtURL).body |> CSV.File(_) |> DataFrame

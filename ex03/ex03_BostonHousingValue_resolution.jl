@@ -38,7 +38,7 @@ import Distributions: quantile, Normal
 
 # 3) Load from internet or from local file the input data into a DataFrame or a Matrix.
 # You will need the CSV options `header=false` and `ignorerepeated=true`
-dataURL = "https://archive.ics.uci.edu/ml/machine-learning-databases/housing/housing.data"
+dataURL = "https://bit.ly/apress_julia_boston"
 data    = @pipe HTTP.get(dataURL).body |> CSV.File(_, delim=' ', header=false, ignorerepeated=true) |> DataFrame
 
 

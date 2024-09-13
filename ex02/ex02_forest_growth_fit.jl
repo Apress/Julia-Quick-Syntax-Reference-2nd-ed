@@ -25,11 +25,10 @@
 
 # Load from internet the following datasets:
 
-ltURL = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/arbres_foret_2012.csv?raw=true"
-dtURL = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/arbres_morts_foret_2012.csv?raw=true"
-pointsURL = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/placettes_foret_2012.csv?raw=true"
-docURL = "https://github.com/sylvaticus/IntroSPMLJuliaCourse/blob/main/lessonsMaterial/02_JULIA2/forestExercise/data/documentation_2012.csv?raw=true"
-
+ltURL     = "https://bit.ly/apress_julia_alive_trees"
+dtURL     = "https://bit.ly/apress_julia_dead_trees"
+pointsURL = "https://bit.ly/apress_julia_inv_points"
+docURL    = "https://bit.ly/apress_julia_inv_doc"
 # You can make for each of the dataset a `@pipe` macro starting with `HTTP.get(URL).body`, continuing the pipe with `CSV.File(_)` and end the pipe with a DataFrame object.
 
 # [...] Write your code here

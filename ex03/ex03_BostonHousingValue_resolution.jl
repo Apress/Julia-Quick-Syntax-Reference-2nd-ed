@@ -12,13 +12,12 @@
 #   9. RAD       index of accessibility to radial highways
 #   10. TAX      full-value property-tax rate per $10,000
 #   11. PTRATIO  pupil-teacher ratio by town
-#   12. B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
-#   13. LSTAT    % lower status of the population
-#   14. MEDV     Median value of owner-occupied homes in $1000's
+#   12. LSTAT    % lower status of the population
+#   13. MEDV     Median value of owner-occupied homes in $1000's
 
 # Further information concerning this dataset can be found on [this file](https://archive.ics.uci.edu/ml/machine-learning-databases/housing/housing.names)
 
-# Our prediction concern the median value (column 14 of the dataset)
+# Our prediction concern the median value (column 13 of the dataset)
 
 # 1) Start by setting the working directory to the directory of this file and activate it. If you have the provided `Manifest.toml` file in the directory, just run `Pkg.instantiate()`, otherwise manually add the packages Pipe, HTTP, CSV, DataFrames, Plots and BetaML.
 # Also, seed the random seed with the integer `123`.
@@ -39,14 +38,13 @@ import Distributions: quantile, Normal
 # 3) Load from internet or from local file the input data into a DataFrame or a Matrix.
 # You will need the CSV options `header=false` and `ignorerepeated=true`
 dataURL = "https://bit.ly/apress_julia_boston"
-data    = @pipe HTTP.get(dataURL).body |> CSV.File(_, delim=' ', header=false, ignorerepeated=true) |> DataFrame
+data    = @pipe HTTP.get(dataURL).body |> CSV.File(_, delim=';', header=false, ignorerepeated=true) |> DataFrame
 
+# 4) Now create the X matrix of features (columns 1 to 12th). Make sure you have a 506×12 matrix (and not a DataFrame).
+X = Matrix(data[:,1:12])
 
-# 4) Now create the X matrix of features (columns 1 to 13th). Make shure you have a 506×13 matrix (and not a DataFrame).
-X = Matrix(data[:,1:13])
-
-# 5) Similarly, define Y to be the 14th column of data
-Y = data[:,14] # Median value of owner-occupied homes in $1000's
+# 5) Similarly, define Y to be the 13th column of data
+Y = data[:,13] # Median value of owner-occupied homes in $1000's
 
 
 # 6) Partition the data in (`xtrain,`xtest`) and (`ytrain`,`ytest`) keeping 80% of the data for training and reserving 20% for testing. Keep the default option to shuffle the data, as the input data isn't.
@@ -54,13 +52,13 @@ Y = data[:,14] # Median value of owner-occupied homes in $1000's
 
 
 # 7) Define a `NeuralNetworkEstimator` model with the following characteristics:
-#   - 3 dense layers with respectively 13, 20 and 1 nodes and activation function relu
+#   - 3 dense layers with respectively 12, 20 and 1 nodes and activation function relu
 #   - cost function `squared_cost` 
-#   - training options: 400 epochs and 6 records to be used on each batch
-l1 = DenseLayer(13,20,f=relu)
+#   - training options: 100 epochs and 8 records to be used on each batch
+l1 = DenseLayer(12,20,f=relu)
 l2 = DenseLayer(20,20,f=relu)
 l3 = DenseLayer(20,1,f=relu)
-mynn= NeuralNetworkEstimator(layers=[l1,l2,l3],loss=squared_cost,batch_size=6,epochs=400)
+mynn= NeuralNetworkEstimator(layers=[l1,l2,l3],loss=squared_cost,batch_size=8,epochs=100)
 
 # 8) Train your model using `ytrain` and a scaled version of `xtrain` (where all columns have zero mean and 1 standard deviation)
 fit!(mynn,fit!(Scaler(),xtrain),ytrain)
@@ -83,12 +81,12 @@ scatter(ytest,ŷtest,xlabel="true values", ylabel="estimated values", legend=no
 # - size of the middle layer
 # - batch size
 # - number of epochs
-inner_layer_size_range = 18:2:22 # 16:2:26
-epoches_range          = 300:100:500 # 200:100:600
-bachsize_range         = [4,6,8] # 4:2:10
+inner_layer_size_range = 15:5:25 
+epoches_range          = [50,100,200] 
+bachsize_range         = [4,8] 
 
 # If you are using the BetaML autotune mechanism, use the following line to build the range of the `layers` parameters to be used in the `hpranges` dictionary starting for a range defined in terms of size of the inner layer:
-layers_range = [[DenseLayer(13,i,f=relu), DenseLayer(i,i,f=relu), DenseLayer(i,1,f=relu)] for i in inner_layer_size_range]
+layers_range = [[DenseLayer(12,i,f=relu), DenseLayer(i,i,f=relu), DenseLayer(i,1,f=relu)] for i in inner_layer_size_range]
 
 res_shares             = [0.5, 0.7, 0.9]
 tuning_method = SuccessiveHalvingSearch(
@@ -109,7 +107,7 @@ scatter(ytest,ŷtest,xlabel="true values", ylabel="estimated values", legend=no
 opt_epochs     = hyperparameters(m).epochs
 opt_batch_size = hyperparameters(m).batch_size
 opt_lsize      = size(hyperparameters(m).layers[1])[2][1]
-opt_layers     = [DenseLayer(13,opt_lsize,f=relu), DenseLayer(opt_lsize,opt_lsize,f=relu),DenseLayer(opt_lsize,opt_lsize,f=relu), DenseLayer(opt_lsize,1,f=relu)] 
+opt_layers     = [DenseLayer(12,opt_lsize,f=relu), DenseLayer(opt_lsize,opt_lsize,f=relu),DenseLayer(opt_lsize,opt_lsize,f=relu), DenseLayer(opt_lsize,1,f=relu)] 
 
 # 13) Study the variable imporance of the neural network model.
 
@@ -126,17 +124,12 @@ var_names = [
   "RAD",     # index of accessibility to radial highways
   "TAX",     # full-value property-tax rate per $10,000
   "PTRATIO", # pupil-teacher ratio by town
-  "B",       # 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
   "LSTAT",   # % lower status of the population
 ]
 
 # Which are the most important variables to correctly predict the house value ?
-opt_layers_zero = [DenseLayer(13,opt_lsize,f=relu), DenseLayer(opt_lsize,opt_lsize,f=relu),DenseLayer(opt_lsize,opt_lsize,f=relu), DenseLayer(opt_lsize,1,f=relu)]
+opt_layers_zero = [DenseLayer(12,opt_lsize,f=relu), DenseLayer(opt_lsize,opt_lsize,f=relu),DenseLayer(opt_lsize,opt_lsize,f=relu), DenseLayer(opt_lsize,1,f=relu)]
 fr = FeatureRanker(model=NeuralNetworkEstimator(layers=opt_layers_zero,epochs=opt_epochs,batch_size=opt_batch_size, verbosity=NONE),nsplits=3,nrepeats=2,recursive=false)
-
-
-fr = FeatureRanker(model=NeuralNetworkEstimator(verbosity=NONE),nsplits=3,nrepeats=2,recursive=false)
-
 
 rank = fit!(fr,xtrain,ytrain)
 loss_by_col        = info(fr)["loss_by_col"]
@@ -147,7 +140,7 @@ loss_fullmodel     = info(fr)["loss_all_cols"]
 loss_fullmodel_sd  = info(fr)["loss_all_cols_sd"]
 ntrials_per_metric = info(fr)["ntrials_per_metric"]
 
-bar(var_names[sortperm(loss_by_col)], loss_by_col[sortperm(loss_by_col)],label="Loss by var", permute=(:x,:y), yerror=quantile(Normal(1,0),0.975) .* (loss_by_col_sd[sortperm(loss_by_col)]./sqrt(ntrials_per_metric)), yrange=[0,0.9])
+bar(var_names[sortperm(loss_by_col)], loss_by_col[sortperm(loss_by_col)],label="Loss by var", permute=(:x,:y), yerror=quantile(Normal(1,0),0.975) .* (loss_by_col_sd[sortperm(loss_by_col)]./sqrt(ntrials_per_metric)), yrange=[0,1.0])
 vline!([loss_fullmodel], label="Loss with all vars",linewidth=2)
 vline!([loss_fullmodel-quantile(Normal(1,0),0.975) * loss_fullmodel_sd/sqrt(ntrials_per_metric),
         loss_fullmodel+quantile(Normal(1,0),0.975) * loss_fullmodel_sd/sqrt(ntrials_per_metric),

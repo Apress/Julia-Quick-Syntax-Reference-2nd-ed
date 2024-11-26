@@ -12,13 +12,12 @@
 #   9. RAD       index of accessibility to radial highways
 #   10. TAX      full-value property-tax rate per $10,000
 #   11. PTRATIO  pupil-teacher ratio by town
-#   12. B        1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
-#   13. LSTAT    % lower status of the population
-#   14. MEDV     Median value of owner-occupied homes in $1000's
+#   12. LSTAT    % lower status of the population
+#   13. MEDV     Median value of owner-occupied homes in $1000's
 
 # Further information concerning this dataset can be found on [this file](https://archive.ics.uci.edu/ml/machine-learning-databases/housing/housing.names)
 
-# Our prediction concern the median value (column 14 of the dataset)
+# Our prediction concern the median value (column 13 of the dataset)
 
 # 1) Start by setting the working directory to the directory of this file and activate it. If you have the provided `Manifest.toml` file in the directory, just run `Pkg.instantiate()`, otherwise manually add the packages Pipe, HTTP, CSV, DataFrames, Plots and BetaML.
 # Also, seed the random seed with the integer `123`.
@@ -36,11 +35,11 @@ dataURL = "https://bit.ly/apress_julia_boston"
 
 # [...] Write your code here
 
-# 4) Now create the X matrix of features (columns 1 to 13th). Make shure you have a 506×13 matrix (and not a DataFrame).
+# 4) Now create the X matrix of features (columns 1 to 12th). Make shure you have a 506×12 matrix (and not a DataFrame).
 
 # [...] Write your code here
 
-# 5) Similarly, define Y to be the 14th column of data
+# 5) Similarly, define Y to be the 13th column of data
 
 # [...] Write your code here
 
@@ -51,7 +50,7 @@ dataURL = "https://bit.ly/apress_julia_boston"
 # 7) Define a `NeuralNetworkEstimator` model with the following characteristics:
 #   - 3 dense layers with respectively 13, 20 and 1 nodes and activation function relu
 #   - cost function `squared_cost` 
-#   - training options: 400 epochs and 6 records to be used on each batch
+#   - training options: 100 epochs and 8 records to be used on each batch
 
 # [...] Write your code here
 
@@ -81,7 +80,7 @@ epoches_range          = # [...] Write your code here
 bachsize_range         = # [...] Write your code here
 
 # If you are using the BetaML autotune mechanism, use the following line to build the range of the `layers` parameters to be used in the `hpranges` dictionary starting for a range defined in terms of size of the inner layer:
-layers_range = [[DenseLayer(13,i,f=relu), DenseLayer(i,i,f=relu), DenseLayer(i,1,f=relu)] for i in inner_layer_size_range]
+layers_range = [[DenseLayer(12,i,f=relu), DenseLayer(i,i,f=relu), DenseLayer(i,1,f=relu)] for i in inner_layer_size_range]
 
 # [...] Write your code here
 
@@ -100,7 +99,6 @@ var_names = [
   "RAD",     # index of accessibility to radial highways
   "TAX",     # full-value property-tax rate per $10,000
   "PTRATIO", # pupil-teacher ratio by town
-  "B",       # 1000(Bk - 0.63)^2 where Bk is the proportion of blacks by town
   "LSTAT",   # % lower status of the population
 ]
 
